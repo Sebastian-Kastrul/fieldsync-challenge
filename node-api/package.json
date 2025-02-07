@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Sebastian-Kastrul/fieldsync-challenge/issues"
   },
-  "homepage": "https://github.com/Sebastian-Kastrul/fieldsync-challenge#readme"
+  "homepage": "https://github.com/Sebastian-Kastrul/fieldsync-challenge#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
