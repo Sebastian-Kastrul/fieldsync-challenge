@@ -12,6 +12,14 @@ const PORT = 3000;
 app.use(express.static( path.join( __dirname, '/client/build')));
 app.use(express.json())
 
+// get external users
+app.get('/api/external-users', async (req,res) => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => response.json())
+      .then(json => res.json(json))
+
+});
+
 // serve index.html to any extension except for above
 app.get( '/*', (req, res) => {
     console.log("got request")
