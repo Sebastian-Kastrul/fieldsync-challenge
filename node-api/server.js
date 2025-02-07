@@ -7,6 +7,7 @@ const app = express();
 
 // import database API functions
 const { accessDB } = require('./databaseAPI');
+const { saveUsers } = require('./databaseAPI')
 
 // Configure network constants
 const hostname = '127.0.0.1';
@@ -20,8 +21,14 @@ app.get('/api/external-users', async (req,res) => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
       .then(json => res.json(json))
-
 });
+
+// save users
+app.post('/api/save-users', async (req,res) => {
+    console.log("save request recieved");
+    // call database API to save data
+    saveUsers( req.body );
+})
 
 // serve index.html to any extension except for above
 app.get( '/*', (req, res) => {

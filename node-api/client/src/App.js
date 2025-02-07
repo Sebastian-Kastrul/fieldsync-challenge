@@ -21,10 +21,24 @@ function Home({handlePageChange, users, setUsers}) {
 }
 
 function Save({handlePageChange, users}) {
+  const saveUsers = (event) => {
+    const userData = JSON.stringify(users);
+    console.log(userData);
+    fetch('http://localhost:3000/api/save-users', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: userData
+    })
+      .then(response => response.json())
+      .catch(error => console.error('Error FFFetching data:', error));
+  }
   return(
     <div>
       <h1>Save Page</h1>
       <NavigationArea handlePageChange={handlePageChange} />
+      <button onClick={saveUsers}>Save Users to Internal API</button>
       <UserTable users={ users } />
     </div>
   )
