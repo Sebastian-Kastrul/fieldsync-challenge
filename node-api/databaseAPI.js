@@ -65,8 +65,8 @@ module.exports = {
         }).join(", "); // join array, delimit with ,
         const query = 
             `INSERT INTO "User" (userId, name, company, email, phone_number)
-             VALUES ${placeholders};`
-
+             VALUES ${placeholders}
+             ON CONFLICT (userId) DO NOTHING;`
         // execute query
         try {
             const client = await pool.connect();
