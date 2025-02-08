@@ -60,5 +60,35 @@ module.exports = {
         } catch (err) {
             console.error("Error saving user data: ", err);
         }
+    },
+    fetchUsers: async function fetchUsers() {
+        // connect to DB as new client
+        const client = await pool.connect();
+
+        try {
+            // request all data from "User" table
+            const query = `SELECT * FROM "User";`
+            const res = await client.query(query);
+            // check for empty, then process
+            if( res.rows.length == 0 ) {
+                console.error("No users found in database. Returning -1.");
+                return -1;
+            } else {
+                console.log("Users found in DB.");
+                // map response to needed JSON format
+                const newJson = res.rows.map( user => ({
+                    id: user.userid,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone_number,
+                    company: {name: user.company}
+                }));
+                return newJson;
+            }
+        } catch (err) {
+            console.error("Error getting users from DB: ", err.stack);
+        } finally {
+            client.release();
+        }
     }
 };
