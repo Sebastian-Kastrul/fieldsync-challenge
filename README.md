@@ -24,6 +24,7 @@ This section will cover the high-level architectural design of the application. 
 - The React Frontend
 - The Node.js Backend
 - the PostgreSQL database
+
 The following graph shows the high-level architecture of the system:
 ![Architecture Diagram](/application-architecture.png)
 #### React Frontend
