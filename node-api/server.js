@@ -41,7 +41,6 @@ app.get('/api/fetch-users', async (req,res) => {
         res.json({ "error": "-1" });
     } else {
         // data found, return
-        console.log(returnData);
         res.json(returnData);
     }
 });

@@ -50,7 +50,6 @@ function App() {
             users={ users }
             setUsers={ setUsers }
             status = { status }
-            setStatus = { setStatus }
             onClickHandler={getExternalUsers}/>
     );
   } else if ( page == "save" ) {
@@ -60,7 +59,6 @@ function App() {
             handlePageChange={ handlePageChange }
             users={ users }
             status = { status }
-            setStatus = { setStatus }
             onClickHandler={saveUsers}/>
     )
   } else if ( page == "fetch" ) {
@@ -70,7 +68,6 @@ function App() {
             handlePageChange={ handlePageChange }
             users={ users }
             status = { status }
-            setStatus = { setStatus }
             onClickHandler={fetchUsers}/>
     )
   }
@@ -80,13 +77,13 @@ Component Name: Page
 Description: Generic Page template is populated based on the pagge state to display
 the Home, Save, or Fetch utility.
 */
-function Page({title, buttonText, onClickHandler, users, status, setStatus, handlePageChange}) {
+function Page({title, buttonText, onClickHandler, users, status, handlePageChange}) {
   return(
     <div className="body">
       <HeaderArea content={title} />
       <NavigationArea handlePageChange={handlePageChange} />
       <button className="submit" onClick={onClickHandler}>{buttonText}</button>
-      <StatusArea status = { status } setStatus = { setStatus } />
+      <StatusArea status = { status } />
       <UserTable users={ users } />
     </div>
   );
@@ -124,7 +121,7 @@ Component Name: StatusArea
 Description: Leaf Component to populate with status messages, e.g., no data
   found in database or similar.
 */
-function StatusArea( {status, setStatus} ) {
+function StatusArea( {status} ) {
   if( status === null ) {
     return(
       <div>
