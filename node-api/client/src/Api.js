@@ -12,7 +12,7 @@ export async function getExternalUsersApi() {
           return data;
         }
       } catch (err) {
-        console.error("Error fetching user data: ", err);
+        console.error("[API] Error fetching user data: ", err);
       }
 }
 export async function saveUsersApi( users ) {
@@ -25,7 +25,7 @@ export async function saveUsersApi( users ) {
       body: userData
     })
       .then(response => response.json())
-      .catch(error => console.error('Error fetching data:', error))
+      .catch(error => console.error('[API] Error fetching data:', error))
 }
 export async function fetchUsersApi() {
     try {
@@ -33,12 +33,11 @@ export async function fetchUsersApi() {
         const data = await response.json();
         // check for error response for no data found
         if( "error" in data ) {
-          console.log("error block enetered")
           return null;
         } else { // else set users
           return data;
         }
       } catch (err) {
-        console.error("Error fetching user data", err );
+        console.error("[API] Error fetching user data", err );
       }
 }

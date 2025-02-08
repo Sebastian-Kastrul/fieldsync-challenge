@@ -71,10 +71,10 @@ module.exports = {
         try {
             const client = await pool.connect();
             await client.query(query, values);
-            console.log("User data saved successfully.");
+            console.log("[DatabaseAPI] User data saved successfully.");
             client.release();
         } catch (err) {
-            console.error("Error saving user data: ", err);
+            console.error("[DatabaseAPI] Error saving user data: ", err);
         }
     },
     /*
@@ -95,10 +95,8 @@ module.exports = {
             const res = await client.query(query);
             // check for empty, then process
             if( res.rows.length == 0 ) {
-                console.error("No users found in database. Returning -1.");
                 return -1;
             } else {
-                console.log("Users found in DB.");
                 // map response to needed JSON format
                 const newJson = res.rows.map( user => ({
                     id: user.userid,
@@ -110,7 +108,7 @@ module.exports = {
                 return newJson;
             }
         } catch (err) {
-            console.error("Error getting users from DB: ", err.stack);
+            console.error("[DatabaseAPI] Error getting users from DB: ", err.stack);
         } finally {
             client.release();
         }
