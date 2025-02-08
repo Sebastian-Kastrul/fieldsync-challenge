@@ -4,6 +4,21 @@ This simple application implements a React frontend, a Node.js backend, and a Po
 - How to run the application locally
 - The architecture of the application
 ### How to Install
+#### Prerequisites
+##### Docker
+Docker is the primary prerequisite for running this application.
+For Linux systems, the instructions for installing Docker can be found here: https://docs.docker.com/engine/install/. Select your distribution then follow the instructions.
+
+For Windows and MacOS systems, you will need to install Docker Desktop instead. The instructions for Docker Desktop can be found here: https://docs.docker.com/desktop/
+##### Git
+Git is optionally needed to clone this project. You can also download the project .zip directly from GitHub. Git installation instruction can be found here: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+#### Installation
+To install this project, follow these steps:
+1. Navigate to where you want to install the file. For example, `~/Documents`.
+2. Clone this project by running `git clone https://github.com/Sebastian-Kastrul/fieldsync-challenge`. This will create a new directory at `~/Documents/fieldsync-challenge`.
+3. Enter the fieldsync-challenge directory: `cd fieldsync-challenge`
+4. Run the application using docker. Depending on your systttem, it may be necessary to run this command as root: `sudo docker compose -f compose_all.yml up --build`
+5. The application is now running. Open any browser and navigate to `localhost:3000` to see it.
 ### Architecture
 This section will cover the high-level architectural design of the application. The architecture is broken up by major component, being:
 - The React Frontend
