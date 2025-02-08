@@ -24,6 +24,8 @@ This section will cover the high-level architectural design of the application. 
 - The React Frontend
 - The Node.js Backend
 - the PostgreSQL database
+The following graph shows the high-level architecture of the system:
+![Architecture Diagram](/application-architecture.png)
 #### React Frontend
 The React Frontend acts as the view for the application. Source code of interest is located in `App.js`, `App.css` and in `Api.js` in the `client/src` directory. In production, an optimized build is found in `client/build`.
 ##### App.js
