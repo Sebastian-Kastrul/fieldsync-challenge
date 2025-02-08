@@ -26,7 +26,6 @@ app.post('/api/save-users', async (req,res) => {
     console.log("save request recieved");
     // call database API to save data
     saveUsers( req.body );
-    // TODO Respond to browser
 })
 
 // fetch users

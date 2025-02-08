@@ -15,6 +15,10 @@ function App() {
   // onclick page change handler
   const handlePageChange = ( newPageState ) => {
     setStatus(null);
+    if( newPageState == "fetch" ) {
+      // clear user data
+      setUsers(null);
+    }
     setPage(newPageState);
   }
   //onClick handlers
@@ -22,6 +26,7 @@ function App() {
     const newUserData = await getExternalUsersApi();
     if( newUserData ) {
       setUsers(newUserData);
+      setStatus("User data updated.");
     } else {
       setStatus("No user data found.");
     }
@@ -29,6 +34,7 @@ function App() {
   const saveUsers = (event) => {
     if( users ) {
       saveUsersApi( users );
+      setStatus("User data saved.");
     } else {
       setStatus("No user data to save. Use the Home Page to get user data.")
     }
@@ -37,6 +43,7 @@ function App() {
     const newUserData = await fetchUsersApi();
     if( newUserData ) {
       setUsers(newUserData);
+      setStatus("User data updated.");
     } else {
       setStatus("No user data found.");
     }
