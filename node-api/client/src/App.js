@@ -22,6 +22,7 @@ function App() {
     setPage(newPageState);
   }
   //onClick handlers
+  // getExternalUsers: call API to get users data from external website
   const getExternalUsers = async (event) => {
     const newUserData = await getExternalUsersApi();
     if( newUserData ) {
@@ -31,6 +32,7 @@ function App() {
       setStatus("No user data found.");
     }
   }
+  // saveUsers: call API to save current users data to DB
   const saveUsers = (event) => {
     if( users ) {
       saveUsersApi( users );
@@ -39,6 +41,7 @@ function App() {
       setStatus("No user data to save. Use the Home Page to get user data.")
     }
   }
+  // fetchUsers: call API to fetch all users from DB, inform user if none found.
   const fetchUsers = async (event) => {
     const newUserData = await fetchUsersApi();
     if( newUserData ) {
