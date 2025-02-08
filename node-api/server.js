@@ -50,12 +50,6 @@ app.get('/api/fetch-users', async (req,res) => {
     }
 });
 
-// serve index.html to any extension except for above
-app.get( '/*', (req, res) => {
-    console.log("got request")
-    res.sendFile(path.join(__dirname, '/react-app/build', 'index.html'))
-});
-
 // Open up server on port PORT
 app.listen(PORT, () => {
     console.log('Server is running on port ' + PORT);

@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './fieldsync_logo.jpeg';
 import './App.css';
 import React, { useEffect, useState } from "react";
 
@@ -24,9 +24,10 @@ function Home({handlePageChange, users, setUsers, status, setStatus}) {
   }
   return(
     <div class="body">
-      <h1>Home Page</h1>
+      <HeaderArea content="Home Page" />
       <NavigationArea handlePageChange={handlePageChange} />
-      <button onClick={getExternalUsers}>Download Users from External API</button>
+      <button class="submit" onClick={getExternalUsers}>Download Users from 
+            External API</button>
       <StatusArea status = { status } setStatus = { setStatus } />
       <UserTable users={ users } />
     </div>
@@ -49,9 +50,10 @@ function Save({handlePageChange, users, status, setStatus}) {
   }
   return(
     <div class="body">
-      <h1>Save Page</h1>
+      <HeaderArea content="Save Page" />
       <NavigationArea handlePageChange={handlePageChange} />
-      <button onClick={saveUsers}>Save Users to Internal Database</button>
+      <button class="submit" onClick={saveUsers}>Save Users to Internal 
+          Database</button>
       <StatusArea status = { status } setStatus = { setStatus } />
       <UserTable users={ users } />
     </div>
@@ -77,11 +79,20 @@ function Fetch({handlePageChange, users, setUsers, status, setStatus}) {
 
   return(
     <div class="body">
-      <h1>Fetch Page</h1>
+      <HeaderArea content="Fetch Page" />
       <NavigationArea handlePageChange={handlePageChange} />
-      <button onClick={fetchUsers}>Fetch Users from Internal Database</button>
+      <button class="submit" onClick={fetchUsers}>Fetch Users from Internal 
+        Database</button>
       <StatusArea status = { status } setStatus = { setStatus } />
       <UserTable users={ users } />
+    </div>
+  )
+}
+function HeaderArea( {content} ) {
+  return(
+    <div class = "header">
+      <img src={logo}></img>
+      <h1>{ content }</h1>
     </div>
   )
 }
@@ -89,6 +100,7 @@ function Fetch({handlePageChange, users, setUsers, status, setStatus}) {
 function NavigationArea({handlePageChange}) {
   return(
     <div class = "navigation">
+        <h2>Navigation: </h2>
         <button onClick={() => handlePageChange('home')}>Home</button>
         <button onClick={() => handlePageChange('save')}>Save</button>
         <button onClick={() => handlePageChange('fetch')}>Fetch</button>
@@ -114,21 +126,38 @@ function StatusArea( {status, setStatus} ) {
 function UserTable({users}) {
   if( users === null){
     return(
-      <p>Press download to retrieve external users</p>
+      <p>Welcome. Use the navigation bar to navigate between the Home,
+        Save, and Fetch utilities.
+        <ul>
+          <li>The Home utility fetches user data from an external website.</li>
+          <li>The Save utility saves the current user table to the database.</li>
+          <li>The Fetch utility fetches all saved user data from the database.</li>
+        </ul>
+      </p>
     )
   } else {
     return(
       <div class="userTable">
-        <ul>
-          {users.map( user => (
-            <li key={user.id}>
-              <p>Name: {user.name}</p>
-              <p>Company: {user.company.name}</p>
-              <p>Email: {user.email}</p>
-              <p>Phone: {user.phone}</p>
-            </li>
-          ))}
-        </ul>
+        <table class="userTable">
+          <thead>
+            <tr>
+              <th>Name:</th>
+              <th>Company:</th>
+              <th>Email:</th>
+              <th>Phone:</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map( user => (
+              <tr key={user.id}>
+                <td>{user.name}</td>
+                <td>{user.company.name}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     )
   }
