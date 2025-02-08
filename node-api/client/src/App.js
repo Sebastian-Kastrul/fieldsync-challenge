@@ -1,105 +1,117 @@
 import logo from './fieldsync_logo.jpeg';
+import { getExternalUsersApi, saveUsersApi, fetchUsersApi } from './Api';
 import './App.css';
 import React, { useEffect, useState } from "react";
-
-function Home({handlePageChange, users, setUsers, status, setStatus}) {
-  // getExternalUsers API call handler
+/*
+Component Name: App
+Description: Root component. Functions as the model by holding essential states
+  to pass to subcomponents as props. 
+*/
+function App() {
+  // set default state to home
+  const [page, setPage] = useState("home");
+  const [users, setUsers] = useState(null);
+  const [status, setStatus] = useState(null);
+  // onclick page change handler
+  const handlePageChange = ( newPageState ) => {
+    setStatus(null);
+    setPage(newPageState);
+  }
+  //onClick handlers
   const getExternalUsers = async (event) => {
-    try {
-      // make request to node server
-      const response = await fetch('http://localhost:3000/api/external-users');
-      const data = await response.json();
-      // check for error response
-      if( "error" in data )
-      {
-        // no user data found
-        setStatus("No user data found.")
-      } else {
-        // user data found
-        setUsers( data );
-      }
-    } catch (err) {
-      console.error("Error fetching user data: ", err);
+    const newUserData = await getExternalUsersApi();
+    if( newUserData ) {
+      setUsers(newUserData);
+    } else {
+      setStatus("No user data found.");
     }
   }
-  return(
-    <div class="body">
-      <HeaderArea content="Home Page" />
-      <NavigationArea handlePageChange={handlePageChange} />
-      <button class="submit" onClick={getExternalUsers}>Download Users from 
-            External API</button>
-      <StatusArea status = { status } setStatus = { setStatus } />
-      <UserTable users={ users } />
-    </div>
-  )
-}
-
-function Save({handlePageChange, users, status, setStatus}) {
   const saveUsers = (event) => {
-    const userData = JSON.stringify(users);
-    console.log(userData);
-    fetch('http://localhost:3000/api/save-users', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: userData
-    })
-      .then(response => response.json())
-      .catch(error => console.error('Error FFFetching data:', error));
-  }
-  return(
-    <div class="body">
-      <HeaderArea content="Save Page" />
-      <NavigationArea handlePageChange={handlePageChange} />
-      <button class="submit" onClick={saveUsers}>Save Users to Internal 
-          Database</button>
-      <StatusArea status = { status } setStatus = { setStatus } />
-      <UserTable users={ users } />
-    </div>
-  )
-}
-
-function Fetch({handlePageChange, users, setUsers, status, setStatus}) {
-  const fetchUsers = async (event) => {
-    try {
-      const response = await fetch('http://localhost:3000/api/fetch-users');
-      const data = await response.json();
-      // check for error response for no data found
-      if( "error" in data ) {
-        console.log("error block enetered")
-        setStatus("No user data found in database.")
-      } else { // else set users
-        setUsers(data);
-      }
-    } catch (err) {
-      console.error("Error fetching user data", err );
+    if( users ) {
+      saveUsersApi( users );
+    } else {
+      setStatus("No user data to save. Use the Home Page to get user data.")
     }
   }
-
+  const fetchUsers = async (event) => {
+    const newUserData = await fetchUsersApi();
+    if( newUserData ) {
+      setUsers(newUserData);
+    } else {
+      setStatus("No user data found.");
+    }
+  }
+  // render correct page based on page state
+  if( page == "home"){
+    return (
+      <Page title="Home Page"
+            buttonText="Download Users from External API"
+            handlePageChange={ handlePageChange }
+            users={ users }
+            setUsers={ setUsers }
+            status = { status }
+            setStatus = { setStatus }
+            onClickHandler={getExternalUsers}/>
+    );
+  } else if ( page == "save" ) {
+    return (
+      <Page title="Save Page"
+            buttonText="Save Users to Internal Database"
+            handlePageChange={ handlePageChange }
+            users={ users }
+            status = { status }
+            setStatus = { setStatus }
+            onClickHandler={saveUsers}/>
+    )
+  } else if ( page == "fetch" ) {
+    return(
+      <Page title="Fetch Page"
+            buttonText="Fetch Users from Internal Database"
+            handlePageChange={ handlePageChange }
+            users={ users }
+            status = { status }
+            setStatus = { setStatus }
+            onClickHandler={fetchUsers}/>
+    )
+  }
+}
+/*
+Component Name: Page
+Description: Generic Page template is populated based on the pagge state to display
+the Home, Save, or Fetch utility.
+*/
+function Page({title, buttonText, onClickHandler, users, status, setStatus, handlePageChange}) {
   return(
-    <div class="body">
-      <HeaderArea content="Fetch Page" />
+    <div className="body">
+      <HeaderArea content={title} />
       <NavigationArea handlePageChange={handlePageChange} />
-      <button class="submit" onClick={fetchUsers}>Fetch Users from Internal 
-        Database</button>
+      <button className="submit" onClick={onClickHandler}>{buttonText}</button>
       <StatusArea status = { status } setStatus = { setStatus } />
       <UserTable users={ users } />
     </div>
-  )
+  );
 }
+/*
+Component Name: HeaderArea
+Description: Leaf component for the display of a simple header, including page
+  title and FieldSync logo.
+*/
 function HeaderArea( {content} ) {
   return(
-    <div class = "header">
+    <div className = "header">
       <img src={logo}></img>
       <h1>{ content }</h1>
     </div>
   )
 }
-
+/*
+Component Name: NavigationArea
+Description: Leaf component for the navigation bar. inherits handlePageChange to
+  manage nagication on-click responses.
+*/
 function NavigationArea({handlePageChange}) {
   return(
-    <div class = "navigation">
+    <div className = "navigation">
         <h2>Navigation: </h2>
         <button onClick={() => handlePageChange('home')}>Home</button>
         <button onClick={() => handlePageChange('save')}>Save</button>
@@ -107,7 +119,11 @@ function NavigationArea({handlePageChange}) {
     </div>
   )
 }
-
+/*
+Component Name: StatusArea
+Description: Leaf Component to populate with status messages, e.g., no data
+  found in database or similar.
+*/
 function StatusArea( {status, setStatus} ) {
   if( status === null ) {
     return(
@@ -116,16 +132,22 @@ function StatusArea( {status, setStatus} ) {
     )
   } else {
     return(
-      <div class = "status">
+      <div className = "status">
         <p>{status}</p>
       </div>
     )
   }
 }
-
+/*
+Component Name: UserTable
+Description: maps an arbitrary number of users (stored in users state) to an
+  HTML table. If there is no user data, displays a welcome / instruction message
+  instead.
+*/
 function UserTable({users}) {
   if( users === null){
     return(
+      // Intro text before the user has done anything.
       <p>Welcome. Use the navigation bar to navigate between the Home,
         Save, and Fetch utilities.
         <ul>
@@ -137,8 +159,9 @@ function UserTable({users}) {
     )
   } else {
     return(
-      <div class="userTable">
-        <table class="userTable">
+      // map content of users stat onto a table
+      <div className="userTable">
+        <table className="userTable">
           <thead>
             <tr>
               <th>Name:</th>
@@ -161,44 +184,5 @@ function UserTable({users}) {
       </div>
     )
   }
-  
 }
-
-function App() {
-  // set default state to home
-  const [page, setPage] = useState("home");
-  const [users, setUsers] = useState(null);
-  const [status, setStatus] = useState(null);
-
-  // onclick page change handler
-  const handlePageChange = ( newPageState ) => {
-    setStatus(null);
-    setPage(newPageState);
-  }
-  // render correct page based on page state
-  if( page == "home"){
-    return (
-      <Home handlePageChange={ handlePageChange }
-            users={ users }
-            setUsers={ setUsers }
-            status = { status }
-            setStatus = { setStatus }/>
-    );
-  } else if ( page == "save" ) {
-    return (
-      <Save handlePageChange={ handlePageChange } users={ users }
-            status = { status }
-            setStatus = { setStatus }/>
-    )
-  } else if ( page == "fetch" ) {
-    return(
-      <Fetch handlePageChange={ handlePageChange}
-             users={ users }
-             setUsers={ setUsers }
-             status = { status }
-             setStatus = { setStatus }/>
-    )
-  }
-}
-
 export default App;

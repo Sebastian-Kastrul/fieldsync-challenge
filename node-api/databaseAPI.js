@@ -1,5 +1,9 @@
 // configure DB access
 const { Pool } = require('pg'); // connection pool
+/*
+Client pool for access to postgres. Credentials can check the environment
+to increase portability.
+*/
 const pool = new Pool({
     user: process.env.DATABASE_USER || 'postgres',
     // host: process.env.DATABASE_HOST || 'db', 
@@ -11,6 +15,11 @@ const pool = new Pool({
 
 module.exports = {
     // test function for DB access:
+    /*
+    Function Name: AccessDB
+    Description: Development debug function to test the connection to the database.
+        Not for production!
+    */
     accessDB: async function accessDB() {
         console.log("Access DB");
         try {
@@ -26,12 +35,18 @@ module.exports = {
                 console.log(response.rows[responseIndex]);
             }
             await client.release();
-        }
-        catch ( error ) {
+        } catch ( error ) {
             console.error("Error connecting to PostgreSQL", error);
         }
-        // close connection
     },
+    /*
+    Function Name: saveUsers
+    Description: Takes userData json. Extracts desired fields (id, name, company,
+        email, and phone number) into arrays, then constructs an array of values
+        and an array of placeholders.
+        The values and placeholders arrays are used to construct a SQL query to 
+        insert all rows into the database with a single query.
+    */
     saveUsers: async function saveUsers( userData ) {
         // extract desired data
         const ids = userData.map( user => user.id );
@@ -62,6 +77,14 @@ module.exports = {
             console.error("Error saving user data: ", err);
         }
     },
+    /*
+    Function Name: fetchUsers
+    Description: Retrieves all user data stored in the database. If not user data
+        is found, returns {error: -1} to report to browser.
+        Otherwise, constructs JSON similar to what is found on
+        https://jsonplaceholder.typicode.com/users but only with the name, id,
+        company, email, and phone number fields.
+    */
     fetchUsers: async function fetchUsers() {
         // connect to DB as new client
         const client = await pool.connect();
