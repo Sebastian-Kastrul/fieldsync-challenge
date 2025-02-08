@@ -42,7 +42,7 @@ app.get('/api/fetch-users', async (req,res) => {
         // check for error code
     if( returnData == -1 ) {
         //Error or no data found, return error
-        res.json(JSON.stringify({ error: -1 }));
+        res.json({ "error": "-1" });
     } else {
         // data found, return
         console.log(returnData);
