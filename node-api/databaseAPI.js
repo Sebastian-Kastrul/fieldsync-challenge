@@ -1,11 +1,11 @@
 // configure DB access
 const { Pool } = require('pg'); // connection pool
 const pool = new Pool({
-    user: 'postgres',
-    host: '127.0.0.1',
-    password: 'password',
-    database: 'userData',
-    port: 5434
+    user: process.env.DATABASE_USER || 'postgres',
+    host: process.env.DATABASE_HOST || 'db', 
+    database: process.env.DATABASE_NAME || 'userData',
+    password: process.env.DATABASE_PASSWORD || 'password',
+    port: process.env.DATABASE_PORT || 5432, 
 });
 
 module.exports = {

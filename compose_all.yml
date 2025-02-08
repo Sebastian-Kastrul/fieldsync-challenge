@@ -1,4 +1,11 @@
 services:
+  server:
+    build:
+      context: ./node-api
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
   db:
     image: postgres
     restart: always
@@ -8,7 +15,7 @@ services:
       POSTGRES_DB: userData
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5434:5432"
 volumes:
